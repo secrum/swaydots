@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# Check if rfkill command is available
+if ! command -v rfkill &> /dev/null; then
+    echo "Error: 'rfkill' command not found."
+    exit 1
+fi
+
+status=$(rfkill list wlan | awk '/Soft/{print $3; exit}')
+
+# Check the status and take appropriate actions
+case $status in
+    "no")
+        rfkill block wlan
+        notify-send "Wlan" "Blocked"
+        ;;
+    "yes")
+        rfkill unblock wlan
+        notify-send "Wlan" "Unblocked"
+        ;;
+    *)
+        echo "Unknown status: $status"
+        exit 1
+        ;;
+esac

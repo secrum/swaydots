@@ -1,0 +1,33 @@
+max-visible=10
+sort=-time
+layer=overlay
+anchor=top-left
+background-color=#24273a
+text-color=#cad3f5
+margin=0,5,5,0
+width=300
+height=180
+border-size=3
+border-color=#8aadf4
+text-alignment=right
+progress-color=over #363a4f
+icons=1
+icon-path=/usr/share/icons/Reversal-purple:/usr/share/icons/hicolor
+max-icon-size=42
+default-timeout=3000
+ignore-timeout=0
+group-by=none
+invisible=0
+format=%s\n%b
+font=JetBrainsMono Nerd Font Bold 9.5
+markup=1
+on-button-left=dismiss-all
+outer-margin=15
+actions=1
+
+[mode=do-not-disturb]
+invisible=1
+on-notify=none
+
+[mode=silent]
+on-notify=none
