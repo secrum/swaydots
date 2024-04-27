@@ -5,10 +5,8 @@
 ### Exeute on startup
     exec GDK_BACKEND=wayland
     exec CLUTTER_BACKEND=wayland
-    exec "~/.config/sway/script/battery.sh&"
-    exec_always --no-startup-id workstyle &> /tmp/workstyle.log
-    exec_always --no-startup-id autotiling
-    exec rm -f /tmp/sovpipe && mkfifo /tmp/sovpipe && tail -f /tmp/sovpipe | sov
+    exec_always --no-startup-id ./.config/autotiling
+    exec blueman-applet
     include /etc/sway/config.d/*
 
 ### Waybar
@@ -17,41 +15,45 @@ bar {
 }
 
 ### Wallpapper
-    output * bg $HOME/.config/walls/tf.jpg fill
+    output * bg $HOME/Pictures/walls/smoking.png fill
 
 ### Option for X-apps
     xwayland enable
 
 ### Variables
     set $mod Mod4
-    set $term kitty
-    set $menu wofi --show run
+    set $term alacritty
+    set $menu wofi --show drun
     set $powermenu sh $HOME/.config/rofi/powermenu/type-1/powermenu.sh
     set $left h
     set $down j
     set $up k
     set $right l
+    set $browser firefox
 
 ### Keyboard input options
-    input * xkb_layout "us"
-    input * repeat_delay 250
-    input * repeat_rate 40
-    input * xkb_options caps:escape
+input * {
+    xkb_layout us,
+    xkb_options grp:alt_shift_toggle,caps:escape
+    xkb_variant dvork
+    repeat_delay 320
+    repeat_rate 35
+}
 
 # Window colors
     # Class                 border  Backgr  Text    indicator   child_border
     client.focused          #eb6f92 #eb6f92 #eb6f92 #eb6f92     #eb6f92 
     client.unfocused        #5f676a #5f676a #5f676a #5f676a     #5f676a
     client.urgent           #eb6f92 #eb6f92 #eb6f92 #eb6f92     #eb6f92 
-	
+
     # Gaps
     gaps inner 6
     gaps outer 2
     default_border none
-    focus_follows_mouse no
+    focus_follows_mouse yes
 
 # Window rules
-    # Disable window border ===
+    # Disable window border
     for_window [class="^.*"] border pixel 2
     for_window [app_id="^.*"] border pixel 2
 
@@ -59,21 +61,21 @@ bar {
     for_window [title="^(Picture-in-Picture)$"] floating enable
     for_window [title="Copyng *"] floating enable
     for_window [title="Moving *"] floating enable
-    
+
     #Disabled swayidle for fullscreen window
     for_window [shell=".*"] inhibit_idle fullscreen
 
 
 ### Idle configuration
     exec swayidle -w \
-    timeout 2520 'swaylock -f -C /home/secrum/.config/swaylock/config' \
+    timeout 2520 'swaylock -f -C ~/.config/swaylock/config' \
         timeout 2800 'systemctl suspend' \
         resume 'swaymsg "output * dpms on"' \
-        before-sleep 'swaylock -f -C /home/secrum/.config/swaylock/config'
+        before-sleep 'swaylock'\
 
 ### Touchpad config
    input type:touchpad {
-    dwt enablede-pro-fonts
+#    dwt enablede-pro-fonts
        tap enabled
        drag enabled 
        natural_scroll disabled
@@ -84,21 +86,29 @@ bar {
     # Rofi 
     bindsym $mod+d exec $menu
 
-    #Terminal
+    # Terminal
     bindsym $mod+Return exec $term -e zsh
-    
+
     # Browser
-    bindsym $mod+b exec firefox
+    bindsym $mod+b exec $browser
 
     # Ranger
     bindsym $mod+r exec $term -e ranger
 
-    # Ranger
+    # Neovim
     bindsym $mod+v exec $term -e nvim
 
     # Telegram
-    bindsym $mod+t exec telegram-desktop
+    bindsym $mod+Shift+t exec telegram-desktop
 
+    # Thunar
+    bindsym $mod+n exec thunar
+
+    # Visual Studio Code
+    bindsym $mod+c exec code
+
+    # Obsidian
+    bindsym $mod+Shift+o exec .local/bin/Obsidian*
 
 ### Key bindings:
     # Windowkill
@@ -117,7 +127,7 @@ bar {
     bindsym $mod+Shift+r reload
 
     # Exit sway (logs you out of your Wayland session)
-    bindsym $mod+Shift+e exec wlogout -p layer-shell 
+    bindsym $mod+Shift+delete exec wlogout -p layer-shell 
 
 
 ### Moving windows:
@@ -170,8 +180,8 @@ bar {
     bindsym $mod+a focus mode_toggle
 
 ### Scratchpad:
-    bindsym $mod+minus move scratchpad
-    bindsym $mod+equal scratchpad show
+    bindsym $mod+Shift+i move scratchpad
+    bindsym $mod+i scratchpad show
 
 ### Audio:
     # Mute
@@ -188,7 +198,7 @@ bar {
     bindsym XF86MonBrightnessUp exec brightnessctl set +5% 
 
 #Screenshot(GRIM)
-    bindsym Shift+Print exec grim -g "$(slurp)" ~/Pictures/screenshots/$(date +%Y-%m-%d_%H-%m-%s).png
+    bindsym Shift+Print exec ggrim -g "$(slurp)" ~/Pictures/screenshots/$(date +%Y-%m-%d_%H-%m-%s).png
     bindsym Print exec grim ~/Pictures/screenshots/$(date +%Y-%m-%d_%H-%m-%s).png
 
 

@@ -1,28 +1,28 @@
 ### ZSH SECRUM ###
-##################
 
-# Powerlevel10k  
-  if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-  fi
+export ZSH="$HOME/.oh-my-zsh"
 
-  [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-# OhMyZsh
-
-  export ZSH="$HOME/.oh-my-zsh"
-  ZSH_THEME="powerlevel10k/powerlevel10k"
-  plugins=(git dnf zsh-vi-mode)
-  source $ZSH/oh-my-zsh.sh
+# OMZ Plugins
+plugins=(git dnf vi-mode)
 
 
 # Aliases
   alias cat='bat --style=plain'
-  alias dnf='dnf5'
+  alias dnf='sudo dnf'
 
 # PATH
-  export PATH="~/.cargo/bin:$PATH"
+if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:" ]]; then
+    PATH="$HOME/.local/bin:$HOME/bin:$PATH"
+fi
 
+export PATH
 # Editor
 export EDITOR="nvim"
 export VISUAL="nvim"
+
+#OMZ sourced script
+source $ZSH/oh-my-zsh.sh
+
+#Starship prompt init
+eval "$(starship init zsh)"
+
